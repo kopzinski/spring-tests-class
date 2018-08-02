@@ -1,7 +1,5 @@
 package br.com.kopzinski.veiculos;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,24 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class CarController {
 	
 	private final CarRepository carRepository;
+	private final CarService carService;
 	
 	@Autowired
-	public CarController(CarRepository carRepository) {
+	public CarController(CarRepository carRepository, CarService carService) {
 		this.carRepository = carRepository;
+		this.carService = carService;
 	}
 	
 	@GetMapping
 	public @ResponseBody List<Car> getCarsToSell() {
 		List<Car> allCars = this.carRepository.findAll();
-		List<Car> carsToSell = new ArrayList<>();
-		
-		for (Car car : allCars) {
-			if(car.getQuantity() > 0) {
-				carsToSell.add(car);
-			}
-		}
-		return carsToSell;
+		List<Car> availableCars = this.carService.filterAvailableCars(allCars);
+		return availableCars;
 	}
+	
 	
 	@PostMapping("/buy")
 	@ResponseStatus(HttpStatus.CREATED)
