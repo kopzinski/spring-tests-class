@@ -14,11 +14,11 @@ public class Car {
 	private String brand;
 	private String model;
 	private Integer year;
-	private Integer quantity;
+	private Integer quantity = 0;
 	private Double marketPrice;
 	private Double sellPrice;
 	private Double payPrice;
-	private Double disccountPercentage;
+	private Double disccountPercentage = 0.0;
 	
 	
 	public Integer getId() {
@@ -76,8 +76,13 @@ public class Car {
 	public void setDisccountPercentage(Double disccountPercentage) {
 		this.disccountPercentage = disccountPercentage;
 	}
+	@Override
+	public String toString() {
+		return "Car [id=" + id + ", brand=" + brand + ", model=" + model + ", year=" + year + ", quantity=" + quantity
+				+ ", marketPrice=" + marketPrice + ", sellPrice=" + sellPrice + ", payPrice=" + payPrice
+				+ ", disccountPercentage=" + disccountPercentage + "]";
+	}
 	
 	
-		
-
+	
 }
