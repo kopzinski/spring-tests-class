@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class CarServiceTest {
@@ -14,36 +15,41 @@ public class CarServiceTest {
 	//So, what the possible scenarios???
 	//(we need to test bad scenarios, its really important, keep it in mind)
 
+	CarService carService;
+	Car unavailableCar;
+	Car availableCar;
+	List<Car> sourceCars;
+	
+	@Before
+	public void setup() {
+		carService = new CarService();
+		availableCar = new Car();
+		availableCar.setQuantity(1);
+		
+		unavailableCar =  new Car();
+		unavailableCar.setQuantity(0);
+		
+		sourceCars = new ArrayList<>();
+	}
+	
 	@Test
 	public void returnsJustOneAvailableCar() {
-		CarService carService = new CarService();
+		//given
+		sourceCars.add(availableCar);
+		sourceCars.add(unavailableCar);
 		
-		List<Car> sourceCars = new ArrayList<>();
-		Car car1 = new Car();
-		car1.setQuantity(0);
-		sourceCars.add(car1);
-		
-		Car car2 = new Car();
-		car2.setQuantity(1);
-		sourceCars.add(car2);
-		
+		//when
 		List<Car> availableCars = carService.filterAvailableCars(sourceCars);
 		
+		//then
 		assertThat(availableCars.size()).isEqualTo(1);
 	}
 	
 	@Test
 	public void returnsJustZeroAvailableCarsIfAllHasQtyZero() {
-		CarService carService = new CarService();
 		
-		List<Car> sourceCars = new ArrayList<>();
-		Car car1 = new Car();
-		car1.setQuantity(0);
-		sourceCars.add(car1);
-		
-		Car car2 = new Car();
-		car2.setQuantity(0);
-		sourceCars.add(car2);
+		sourceCars.add(unavailableCar);
+		sourceCars.add(unavailableCar);
 		
 		List<Car> availableCars = carService.filterAvailableCars(sourceCars);
 		
@@ -52,14 +58,11 @@ public class CarServiceTest {
 	
 	@Test
 	public void returnsJustZeroAvailableCarsWithNoCarWasPassed() {
-		CarService carService = new CarService();
 		
-		List<Car> sourceCars = new ArrayList<>();
 		List<Car> availableCars = carService.filterAvailableCars(sourceCars);
 		
 		assertThat(availableCars.size()).isEqualTo(0);
 	}
-	
 	
 	
 }
